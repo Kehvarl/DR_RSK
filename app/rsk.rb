@@ -334,7 +334,7 @@ class Rsk < Game
       c.uncover()
       if c.is_cat
         @kitten_found = true
-        args.state.game_state = :pause_menu
+        args.state.game_state = :game_over
       end
     end
 

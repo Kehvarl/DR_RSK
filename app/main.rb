@@ -1,13 +1,12 @@
 require('app/main_menu.rb')
 require('app/game.rb')
-require('app/leaper.rb')
-require('app/snake.rb')
-require('app/lindwurm.rb')
 require('app/rsk.rb')
+require('app/game_over.rb')
 
 def setup args
   args.state.game_state = :main_menu
   args.state.main_menu = MainMenu.new({})
+  args.state.over_menu = GameOver.new({})
 end
 
 def main_menu_tick args
@@ -15,27 +14,27 @@ def main_menu_tick args
   args.outputs.primitives << args.state.main_menu.render
   if args.state.main_menu.select_event
     puts args.state.main_menu.message
-    if args.state.main_menu.message == :newgame_snake
-      args.state.game = Snake.new(args)
-      args.state.game_state = :game
-    elsif args.state.main_menu.message == :newgame_lindwurm
-      args.state.game = LindWurm.new(args)
-      args.state.game_state = :game
-    elsif args.state.main_menu.message == :newgame_leap
-      args.state.game = Leap.new({})
-      args.state.game_state = :game
-    elsif args.state.main_menu.message == :newgame_rsk
-      args.state.game = Rsk.new(args)
-      args.state.game_state = :game
-    elsif args.state.main_menu.message == :continue
-      args.state.game_state = :game
-    end
+  elsif args.state.main_menu.message == :newgame_rsk
+    args.state.game = Rsk.new(args)
+    args.state.game_state = :game
+  elsif args.state.main_menu.message == :continue
+    args.state.game_state = :game
   end
 end
 
 
-def game_over args
+def game_over_tick args
+  args.state.game_over.tick args
+  args.outputs.primitives << args.state.game_over.render
 
+  if args.state.game_over.select_event
+    puts args.state.game_over.message
+  elsif args.state.game_over.message == :newgame_rsk
+    args.state.game = Rsk.new(args)
+    args.state.game_state = :game
+  elsif args.state.game_over.message == :continue
+    args.state.game_state = :game
+  end
 end
 
 def tick args
@@ -58,28 +57,9 @@ def tick args
   when :enemy
     args.state.game_state = :player
   when :game_over
-    game_over args
+    args.state.game_over = GameOver.new({}, bg=args.state.game.render())
+    args.state.game_state = :game_over_tick
+  when :game_over_tick
+    game_over_tick args
   end
 end
-
-# TODO
-# Background is needed
-# Also a map of some sort
-# Need some actual game concept
-  # We know its a platformer
-  # What is the main character
-  # What sort of Enemies
-  # How does the world move
-  # Would it be worhtwhile to start over from the platformer demo code?
-# Draw some terrain - done
-# Draw a character - done
-# Jump - done
-# Collision detection
-  # Ground - done
-  # Sides  - done
-  # Terrain - done
-  # Entities - done
-# Animated Sprite
-# Animated Terrain
-# Enemies
-# Attack Actions
