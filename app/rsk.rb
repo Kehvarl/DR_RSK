@@ -281,9 +281,26 @@ class Entity
   end
 end
 
+class Player < AnimSprite
+  def initialize (x,y)
+    super(x,y)
+    @path= "sprites/circle/indigo.png"
+    @w= 16
+    @h= 32
+    @tile_w= 80
+    @tile_h= 80
+
+    @current_pose = :idle
+    @pose_list = {
+      idle: [0,1,2, [:idle]],
+      walk: [0,1,1, [:idle]],
+    }
+  end
+end
+
 class Rsk < Game
   def initialize args={}
-    @robot = {x:632, y:352, w:16, h:32, angle:0}
+    @robot = Player.new(623, 352)
     @entities = new_entities(15)
     @kitten_found = false
   end
@@ -328,6 +345,7 @@ class Rsk < Game
       @robot.x += 1
       @robot.angle = 0
     end
+    @robot.tick(args, @entities)
 
     collisions = @entities.select{|e| @robot.intersect_rect?(e)}
     collisions.each do |c|
@@ -342,7 +360,7 @@ class Rsk < Game
 
   def render
     out = []
-    out << {**@robot, path:"sprites/circle/indigo.png"}.sprite!
+    out << @robot
     #out << @entities
     @entities.each {|c| out << c.render() }
 
