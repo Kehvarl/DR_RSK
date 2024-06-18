@@ -4,7 +4,8 @@ class AnimSprite
   attr_sprite
   attr_accessor :current_frame, :x, :y, :dx, :dy, :moving
 
-  def initialize(x,y)
+  def initialize(x,y, is_player=false)
+    @is_player = is_player
     @x = x
     @y = y
     @moving = false
@@ -112,7 +113,7 @@ class AnimSprite
       move_tick(args, entities)
     end
     animation_tick(args)
-    if not @moving and rand(1000) <= 1
+    if not @moving and rand(1000) <= 1 and not @is_player
       move_to(rand(1216), rand(656))
     end
   end
@@ -300,7 +301,7 @@ end
 
 class Rsk < Game
   def initialize args={}
-    @robot = Player.new(623, 352)
+    @robot = Player.new(623, 352, is_player=true)
     @entities = new_entities(15)
     @kitten_found = false
   end
