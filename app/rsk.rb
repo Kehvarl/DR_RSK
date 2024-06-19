@@ -2,10 +2,12 @@ require('app/game.rb')
 
 class AnimSprite
   attr_sprite
-  attr_accessor :current_frame, :x, :y, :dx, :dy, :moving
+  attr_accessor :current_frame, :x, :y, :dx, :dy, :moving, :vx, :vy
 
   def initialize(x,y, is_player=false)
     @is_player = is_player
+    @vx = 1
+    @vy = 1
     @x = x
     @y = y
     @moving = false
@@ -47,16 +49,16 @@ class AnimSprite
 
   def check_collisions(entities)
     if @dx < 0
-      vx = -1
+      vx = -@vx
     elsif @dx > 0
-      vx = 1
+      vx = @vx
     else
       vx = 0
     end
     if @dy < 0
-      vy = -1
+      vy = -@vy
     elsif @dy > 0
-      vy = 1
+      vy = @vy
     else
       vy = 0
     end
@@ -68,20 +70,23 @@ class AnimSprite
 
   def move_tick(args, entities)
     collisions = check_collisions(entities)
+    if @is_player
+      collisions = []
+    end
 
     if @dx > @x and collisions.size <= 1
-      @x +=1
+      @x += @vx
       @flip_horizontally = false
     elsif @dx < @x and collisions.size <= 1
-      @x -= 1
+      @x -= @vx
       @flip_horizontally = true
     end
     if @dy > @y and collisions.size <= 1
-      @y += 1
+      @y += @vy
     elsif @dy < @y and collisions.size <= 1
-      @y -=1
+      @y -= @vy
     end
-    if @dx == @x and @dy == @y or collisions.size > 1
+    if (@dx == @x and @dy == @y) or collisions.size >1
       @moving = false
       @flip_horizontally = false
       @current_pose = @pose_list[@current_pose][3].sample()
@@ -283,13 +288,15 @@ class Entity
 end
 
 class Player < AnimSprite
-  def initialize (x,y)
-    super(x,y)
+  def initialize (x,y, is_player)
+    super(x,y,is_player)
     @path= "sprites/circle/indigo.png"
     @w= 16
     @h= 32
     @tile_w= 80
     @tile_h= 80
+    @vx = 2
+    @vy = 2
 
     @current_pose = :idle
     @pose_list = {
@@ -330,22 +337,26 @@ class Rsk < Game
 
   def tick args
     super(args)
-
     @entities.each { |e| e.tick(args, @entities) }
 
-    if args.inputs.keyboard.key_held.up
-      @robot.y += 1
-      @robot.angle = 90
-    elsif args.inputs.keyboard.key_held.down
-      @robot.y -= 1
-      @robot.angle = 270
-    elsif args.inputs.keyboard.key_held.left
-      @robot.x -=1
-      @robot.angle = 180
-    elsif args.inputs.keyboard.key_held.right
-      @robot.x += 1
-      @robot.angle = 0
+    if args.inputs.last_active == :keyboard
+      if args.inputs.keyboard.key_held.up
+        @robot.y += @robot.vy
+        @robot.angle = 90
+      elsif args.inputs.keyboard.key_held.down
+        @robot.y -= @robot.vy
+        @robot.angle = 270
+      elsif args.inputs.keyboard.key_held.left
+        @robot.x -= @robot.vx
+        @robot.angle = 180
+      elsif args.inputs.keyboard.key_held.right
+        @robot.x += @robot.vx
+        @robot.angle = 0
+      end
+    elsif args.inputs.last_active == :mouse and args.inputs.mouse.button_left
+      @robot.move_to(args.inputs.mouse.x, args.inputs.mouse.y)
     end
+
     @robot.tick(args, @entities)
 
     collisions = @entities.select{|e| @robot.intersect_rect?(e)}
