@@ -65,7 +65,16 @@ class GameOver
           end
         end
       end
-      # Mouse:  On mouse over label, select index
+      # Mouse Over Menu Items
+      @menu.each_with_index do |item, index|
+        if args.inputs.mouse.inside_rect?({x:400, y:500 - (index * 30)-30, w:400, h:30})
+          @selected_index = index
+          if args.inputs.mouse.button_left
+            @select_event = true
+            @message = @menu[@selected_index][1]
+          end
+        end
+      end
     # On click/enter do something
   end
 
@@ -86,7 +95,7 @@ class GameOver
       if index == @selected_index
         color = HIGHLIGHT_COLOR
       end
-      out << {x:540, y:500 - (index * 30), text: "#{index+1}: #{@menu[index][0]}", **color}.label!
+      out << {x:540, y:500 - (index * 45), text: "#{index+1}: #{@menu[index][0]}", **color}.label!
 
       # Maybe animate some background stuff
     end
