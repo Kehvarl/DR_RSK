@@ -1,24 +1,11 @@
-class GameOver
-  TEXT_COLOR = {r:255, g:255, b:255}.freeze
-  HIGHLIGHT_COLOR = {r:192, g:192, b:255}.freeze
+require('app/menu.rb')
 
-  BANNER_COLORS = [
-    [{r: 255, g: 0, b:0}, {r: 192, g: 0, b:0}, {r: 128, g: 0, b:0}, {r: 64, g: 0, b:0}, {r: 0, g: 0, b:0}],
-    [{r: 255, g: 128, b:0}, {r: 192, g: 64, b:0}, {r: 128, g: 32, b:0}, {r: 64, g: 16, b:0}, {r: 0, g: 0, b:0}],
-    [{r: 255, g: 255, b:0}, {r: 192, g: 192, b:0}, {r: 128, g: 128, b:0}, {r: 64, g: 64, b:0}, {r: 0, g: 0, b:0}],
-    [{r: 255, g: 255, b:255}, {r: 192, g: 192, b:192}, {r: 128, g: 128, b:128}, {r: 64, g: 64, b:64}, {r: 32, g: 32, b:32}],
-  ].freeze
-
-  NUMBERS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'].freeze
-
-  attr_accessor :message, :select_event, :selected_index, :menu
+class GameOver < Menu
 
   def initialize args, bg=false
-    @frame = 0
-    @frame_v = 1
-    @frame_max = 3
-    @frame_delay = 10
+    super(args, bg)
 
+    @title = "Robot Seeks Kitten"
     @menu = [["Start Over", :newgame_rsk],
              ["Exit", :exit]]
     @selected_index = 0
@@ -32,59 +19,9 @@ class GameOver
     end
   end
 
-  def tick args
-    @select_event = false
-
-    @frame_delay -=1
-    if @frame_delay <= 0
-      @frame += @frame_v
-      if @frame > @frame_max or @frame < 0
-        @frame_v = -@frame_v
-        @frame += @frame_v
-      end
-      @frame_delay = 10
-    end
-
-    # Track Selected Menu Item
-    # Change select with mouse or keyboard
-      # Keyboard: Track selected index and increment/decrement
-      if args.inputs.keyboard.key_down.up
-        @selected_index = [0, @selected_index - 1].max
-      elsif args.inputs.keyboard.key_down.down
-        @selected_index = [@selected_index + 1, @menu.size() - 1].min
-      elsif args.inputs.keyboard.key_down.enter
-        @select_event = true
-        @message = @menu[@selected_index][1]
-      else
-        # Iterate over keys one through nine
-        (0..9).each do |num|
-          if args.inputs.keyboard.key_down.send(:"#{NUMBERS[num]}")
-            index = num - 1
-            @selected_index = [@menu.size() - 1, index].min
-            break
-          end
-        end
-      end
-      # Mouse Over Menu Items
-      @menu.each_with_index do |item, index|
-        if args.inputs.mouse.inside_rect?({x:400, y:500 - (index * 30)-30, w:400, h:30})
-          @selected_index = index
-          if args.inputs.mouse.button_left
-            @select_event = true
-            @message = @menu[@selected_index][1]
-          end
-        end
-      end
-    # On click/enter do something
-  end
-
   def render
     out = @bg
-    # Draw Banner
-    out << {x: 500, y: 650, text: "Robot Seeks Kitten", size_enum: 4, **BANNER_COLORS[0][@frame]}.label!
-    out << {x: 507, y: 647, text: "Robot Seeks Kitten", size_enum: 3, **BANNER_COLORS[1][@frame]}.label!
-    out << {x: 514, y: 644, text: "Robot Seeks Kitten", size_enum: 2, **BANNER_COLORS[2][@frame]}.label!
-    out << {x: 521, y: 641, text: "Robot Seeks Kitten", size_enum: 1, **BANNER_COLORS[3][@frame]}.label!
+    out << banner(@title)
 
     out << {x: 600, y: 550, text: "Game Over", size_enum: 2, **BANNER_COLORS[2][@frame]}.label!
     out << {x: 603, y: 547, text: "Game Over", size_enum: 1, **BANNER_COLORS[3][@frame]}.label!
