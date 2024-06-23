@@ -1,3 +1,4 @@
+require('app/title.rb')
 require('app/main_menu.rb')
 require('app/game.rb')
 require('app/rsk.rb')
@@ -5,8 +6,19 @@ require('app/game_over.rb')
 
 def setup args
   args.state.game_state = :main_menu
+  args.state.title = Title.new({})
+  args.state.title_seen = false
   args.state.main_menu = MainMenu.new({})
   args.state.over_menu = GameOver.new({})
+end
+
+def title_tick args
+    args.state.title.tick(args)
+    args.outputs.primitives << args.state.title.render
+    if args.state.title.continue == true
+      args.state.title_seen = true
+      args.state.game_state = :newgame_rsk
+    end
 end
 
 def main_menu_tick args
@@ -15,8 +27,12 @@ def main_menu_tick args
   if args.state.main_menu.select_event
     puts args.state.main_menu.message
   elsif args.state.main_menu.message == :newgame_rsk
-    args.state.game = Rsk.new(args)
-    args.state.game_state = :game
+    if args.state.title_seen == false
+      args.state.game_state = :title
+    else
+      args.state.game = Rsk.new(args)
+      args.state.game_state = :game
+    end
   elsif args.state.main_menu.message == :continue
     args.state.game_state = :game
   end
@@ -45,6 +61,8 @@ def tick args
   args.outputs.primitives << {x:0, y:0, w:1280, h:720, r:0, g:0, b:0}.solid!
 
   case args.state.game_state
+  when :title
+    title_tick args
   when :main_menu
     main_menu_tick args
   when :pause_menu
