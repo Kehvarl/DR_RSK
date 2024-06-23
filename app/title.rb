@@ -11,7 +11,7 @@ class Title
 
   NUMBERS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'].freeze
 
-  attr_accessor :message, :select_event, :selected_index, :menu
+  attr_accessor :menu, :continue
 
   def initialize args, bg=false
     @frame = 0
@@ -29,9 +29,7 @@ class Title
       "Find your kitten so you feel better!",
       ""
     ]
-    @selected_index = 0
-    @select_event = false
-    @message = nil
+    @continue = false
 
     if bg
       @bg = bg
@@ -53,13 +51,16 @@ class Title
       @frame_delay = 10
     end
 
-    # On click/enter do something
+    if args.inputs.keyboard.active #args.state.tick_count - args.inputs.keyboard.active <= 10
+      @continue = true
+    end
   end
 
   def render
+    out = []
     @lines.each_with_index do |item, index|
       color = TEXT_COLOR
-      out << {x:540, y:500 - (index * 45), text: "#{index+1}: #{@lines[index][0]}", **color}.label!
+      out << {x:540, y:700 - (index * 45), text: "#{index+1}: #{@lines[index][0]}", **color}.label!
 
       # Maybe animate some background stuff
     end
