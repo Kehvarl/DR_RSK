@@ -13,15 +13,15 @@ class Title
 
   attr_accessor :menu, :continue
 
-  def initialize args, bg=false
+  def initialize args, tick, bg=false
+    @start_tick = tick
     @frame = 0
     @frame_v = 1
     @frame_max = 3
     @frame_delay = 10
 
-    @title = "Menu"
+    @title = "Robot Seeks Kitten"
     @lines = [
-      "Robot Seeks Kitten",
       "You're a robot who has lost their kitten.",
       "Adding insult to injury, your computer vision is on the fritz",
       "so it's difficult for you to tell what something really is",
@@ -51,16 +51,18 @@ class Title
       @frame_delay = 10
     end
 
-    if args.inputs.keyboard.active #args.state.tick_count - args.inputs.keyboard.active <= 10
+    if args.state.tick_count - @start_tick > 10 and args.inputs.keyboard.active
       @continue = true
     end
   end
 
   def render
     out = []
+    out << {x: 521, y: 641, text: @title, size_enum: 1, **BANNER_COLORS[1][0]}.label!#[@frame]}.label!
+
     @lines.each_with_index do |item, index|
       color = TEXT_COLOR
-      out << {x:540, y:700 - (index * 45), text: "#{index+1}: #{@lines[index][0]}", **color}.label!
+      out << {x:400, y:540 - (index * 30), text: "#{@lines[index]}", **color}.label!
 
       # Maybe animate some background stuff
     end

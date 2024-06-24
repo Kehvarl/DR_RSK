@@ -6,7 +6,7 @@ require('app/game_over.rb')
 
 def setup args
   args.state.game_state = :main_menu
-  args.state.title = Title.new({})
+  args.state.title = Title.new({},0,false)
   args.state.title_seen = false
   args.state.main_menu = MainMenu.new({})
   args.state.over_menu = GameOver.new({})
@@ -17,7 +17,8 @@ def title_tick args
     args.outputs.primitives << args.state.title.render
     if args.state.title.continue == true
       args.state.title_seen = true
-      args.state.game_state = :newgame_rsk
+      args.state.game = Rsk.new(args)
+      args.state.game_state = :game
     end
 end
 
@@ -28,6 +29,7 @@ def main_menu_tick args
     puts args.state.main_menu.message
   elsif args.state.main_menu.message == :newgame_rsk
     if args.state.title_seen == false
+      args.state.title = Title.new({},args.state.tick_count,false)
       args.state.game_state = :title
     else
       args.state.game = Rsk.new(args)
