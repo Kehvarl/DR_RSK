@@ -111,12 +111,12 @@ class AnimSprite
     @tile_y = @pose_list[@current_pose][0]*32
   end
 
-  def tick(args, entities)
+  def tick(args, entities, allow_move = true)
     if @moving
       move_tick(args, entities)
     end
     animation_tick(args)
-    if not @moving and rand(1000) <= 1 and not @is_player
+    if allow_move and not @moving and rand(1000) <= 1 and not @is_player
       move_to(rand(1216), rand(656))
     end
   end
