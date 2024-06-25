@@ -19,6 +19,7 @@ class Title
     @frame_v = 1
     @frame_max = 3
     @frame_delay = 10
+    @cat = Cat.new(320, 400+rand(100))
 
     @title = "Robot Seeks Kitten"
     @lines = [
@@ -40,6 +41,7 @@ class Title
 
   def tick args
     @select_event = false
+    @cat.tick(args, [@cat], false)
 
     @frame_delay -=1
     if @frame_delay <= 0
@@ -66,6 +68,7 @@ class Title
 
       # Maybe animate some background stuff
     end
+    out << @cat
     out
   end
 end
