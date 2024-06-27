@@ -53,7 +53,7 @@ class Title
       @frame_delay = 10
     end
 
-    if args.state.tick_count - @start_tick > 10 and args.inputs.keyboard.active
+    if args.state.tick_count - @start_tick > 10 and (args.inputs.keyboard.active or args.inputs.mouse.button_left)
       @continue = true
     end
   end
