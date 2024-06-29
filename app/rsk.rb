@@ -93,7 +93,8 @@ class Player < AnimSprite
 end
 
 class Rsk < Game
-  def initialize args={}
+  def initialize args={tick_count:0}
+    @start_tick = args.tick_count
     @robot = Player.new(623, 352, is_player=true)
     @entities = new_entities(15)
     @kitten_found = false
@@ -122,6 +123,9 @@ class Rsk < Game
   end
 
   def tick args
+    if args.tick_count - @start_tick < 10
+      return
+    end
     super(args)
     @entities.each { |e| e.tick(args, @entities) }
 
