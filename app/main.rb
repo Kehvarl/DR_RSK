@@ -63,19 +63,15 @@ def tick args
   args.outputs.primitives << {x:0, y:0, w:1280, h:720, r:0, g:0, b:0}.solid!
 
   case args.state.game_state
+  when :game
+    args.state.game.tick args
+    args.outputs.primitives << args.state.game.render()
   when :title
     title_tick args
   when :main_menu
     main_menu_tick args
   when :pause_menu
     main_menu_tick args
-  when :game
-    args.state.game.tick args
-    args.outputs.primitives << args.state.game.render()
-  when :player
-    args.state.game_state = :enemy
-  when :enemy
-    args.state.game_state = :player
   when :game_over
     args.state.game_over = GameOver.new({}, bg=args.state.game.render())
     args.state.game_state = :game_over_tick

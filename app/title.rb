@@ -1,3 +1,24 @@
+require('app/game_sprites.rb')
+
+class Player < AnimSprite
+  def initialize (x,y, is_player)
+    super(x,y,is_player)
+    @path= "sprites/circle/indigo.png"
+    @w= 16
+    @h= 32
+    @tile_w= 80
+    @tile_h= 80
+    @vx = 2
+    @vy = 2
+
+    @current_pose = :idle
+    @pose_list = {
+      idle: [0,1,2, [:idle]],
+      walk: [0,1,1, [:idle]],
+    }
+  end
+end
+
 class Title
   TEXT_COLOR = {r:255, g:255, b:255}.freeze
   HIGHLIGHT_COLOR = {r:192, g:192, b:255}.freeze
@@ -20,6 +41,7 @@ class Title
     @frame_max = 3
     @frame_delay = 10
     @cat = Cat.new(320, 400+rand(100))
+    @robot = Player.new(310, 500+rand(100), false)
 
     @title = "Robot Seeks Kitten"
     @lines = [
@@ -42,6 +64,8 @@ class Title
   def tick args
     @select_event = false
     @cat.tick(args, [@cat], false)
+    @robot.tick(args, [@robot], false)
+
 
     @frame_delay -=1
     if @frame_delay <= 0
@@ -69,6 +93,7 @@ class Title
       # Maybe animate some background stuff
     end
     out << @cat
+    out << @robot
     out
   end
 end
