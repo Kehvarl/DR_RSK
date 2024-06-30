@@ -73,25 +73,6 @@ class Entity
   end
 end
 
-class Player < AnimSprite
-  def initialize (x,y, is_player)
-    super(x,y,is_player)
-    @path= "sprites/circle/indigo.png"
-    @w= 16
-    @h= 32
-    @tile_w= 80
-    @tile_h= 80
-    @vx = 2
-    @vy = 2
-
-    @current_pose = :idle
-    @pose_list = {
-      idle: [0,1,2, [:idle]],
-      walk: [0,1,1, [:idle]],
-    }
-  end
-end
-
 class Rsk < Game
   def initialize args={tick_count:0}
     @start_tick = args.tick_count

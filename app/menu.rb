@@ -81,10 +81,10 @@ class Menu
 
   def banner(title)
     out = []
-    out << {x: 500, y: 650, text: title, size_enum: 4, **BANNER_COLORS[0][@frame]}.label!
-    out << {x: 507, y: 647, text: title, size_enum: 3, **BANNER_COLORS[1][@frame]}.label!
-    out << {x: 514, y: 644, text: title, size_enum: 2, **BANNER_COLORS[2][@frame]}.label!
-    out << {x: 521, y: 641, text: title, size_enum: 1, **BANNER_COLORS[3][@frame]}.label!
+    out << {x: 530, y: 650, text: title, size_enum: 4, **BANNER_COLORS[0][@frame]}.label!
+    out << {x: 537, y: 647, text: title, size_enum: 3, **BANNER_COLORS[1][@frame]}.label!
+    out << {x: 544, y: 644, text: title, size_enum: 2, **BANNER_COLORS[2][@frame]}.label!
+    out << {x: 551, y: 641, text: title, size_enum: 1, **BANNER_COLORS[3][@frame]}.label!
     out
   end
 

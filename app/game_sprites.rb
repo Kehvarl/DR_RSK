@@ -1,5 +1,42 @@
 require('app/anim_sprite.rb')
 
+class Heart < AnimSprite
+  def initialize (x,y)
+    super(x,y)
+    @path= "sprites/sheets/heart.png"
+    @w= 16
+    @h= 16
+    @tile_w= 16
+    @tile_h= 16
+    @vx = 2
+    @vy = 2
+
+    @current_pose = :spin
+    @pose_list = {
+      spin: [0,3,1, [:spin]]
+    }
+  end
+end
+
+class Player < AnimSprite
+  def initialize (x,y, is_player)
+    super(x,y,is_player)
+    @path= "sprites/circle/indigo.png"
+    @w= 16
+    @h= 32
+    @tile_w= 80
+    @tile_h= 80
+    @vx = 2
+    @vy = 2
+
+    @current_pose = :idle
+    @pose_list = {
+      idle: [0,1,2, [:idle]],
+      walk: [0,1,1, [:idle]],
+      look: [0,1,1, [:look]]
+    }
+  end
+end
 
 class Cat < AnimSprite
   def initialize (x,y)
