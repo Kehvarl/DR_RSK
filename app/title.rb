@@ -21,10 +21,12 @@ class Title
     @frame_v = 1
     @frame_max = 3
     @frame_delay = 10
-    @cat = Cat.new(320, 400+rand(100))
-    @robot = Player.new(310, 500+rand(100), false)
+    @cat = Cat.new(948, 400)
+    @cat.flip_horizontally = false
+    @robot = Player.new(296, 400, false)
     @robot.current_pose = :look
-
+    @robot.flip_horizontally = true
+    
     @title = "Robot Seeks Kitten"
     @lines = [
       "You're a robot who has lost their kitten.",
@@ -66,11 +68,12 @@ class Title
 
   def render
     out = []
-    out << {x: 521, y: 641, text: @title, size_enum: 1, **BANNER_COLORS[1][0]}.label!#[@frame]}.label!
+    #out << {x: 521, y: 641, text: @title, size_enum: 1, **BANNER_COLORS[1][0]}.label!#[@frame]}.label!
+    out << {x: 423, y:400, w:434, h:278, path:"sprites/misc/rsk.png"}.sprite!
 
     @lines.each_with_index do |item, index|
       color = TEXT_COLOR
-      out << {x:400, y:540 - (index * 30), text: "#{@lines[index]}", **color}.label!
+      out << {x:400, y:380 - (index * 30), text: "#{@lines[index]}", **color}.label!
 
       # Maybe animate some background stuff
     end
