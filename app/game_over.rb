@@ -13,10 +13,10 @@ class GameOver < Menu
     @select_event = false
     @message = nil
 
-    @cat = Cat.new(648, 400)
+    @cat = Cat.new(648, 350)
     @cat.flip_horizontally = true
-    @heart = Heart.new(632, 424)
-    @robot = Player.new(596, 400, false)
+    @heart = Heart.new(632, 374)
+    @robot = Player.new(596, 350, false)
 
     if bg
       @bg = bg
@@ -34,14 +34,15 @@ class GameOver < Menu
 
   def render
     out = [] #@bg
-    out << banner(@title)
+    #out << banner(@title)
+    out << {x: 423, y:400, w:434, h:278, path:"sprites/misc/rsk.png"}.sprite!
 
     out << @cat
     out << @heart
     out << @robot
 
-    out << {x: 580, y: 550, text: "Kitten Found!", size_enum: 2, **BANNER_COLORS[2][@frame]}.label!
-    out << {x: 584, y: 547, text: "Kitten Found!", size_enum: 1, **BANNER_COLORS[3][@frame]}.label!
+    out << {x: 580, y: 350, text: "Kitten Found!", size_enum: 2, **BANNER_COLORS[2][@frame]}.label!
+    out << {x: 585, y: 343, text: "Kitten Found!", size_enum: 1, **BANNER_COLORS[3][@frame]}.label!
 
     # Draw Menu Items
     @menu.each_with_index do |item, index|
@@ -49,7 +50,7 @@ class GameOver < Menu
       if index == @selected_index
         color = HIGHLIGHT_COLOR
       end
-      out << {x:540, y:360 - (index * 45), text: "#{index+1}: #{@menu[index][0]}", **color}.label!
+      out << {x:540, y:300 - (index * 45), text: "#{index+1}: #{@menu[index][0]}", **color}.label!
 
       # Maybe animate some background stuff
     end
