@@ -26,7 +26,7 @@ class Title
     @robot = Player.new(296, 400, false)
     @robot.current_pose = :look
     @robot.flip_horizontally = true
-    
+
     @title = "Robot Seeks Kitten"
     @lines = [
       "You're a robot who has lost their kitten.",
@@ -68,8 +68,10 @@ class Title
 
   def render
     out = []
-    #out << {x: 521, y: 641, text: @title, size_enum: 1, **BANNER_COLORS[1][0]}.label!#[@frame]}.label!
     out << {x: 423, y:400, w:434, h:278, path:"sprites/misc/rsk.png"}.sprite!
+
+    out << @cat
+    out << @robot
 
     @lines.each_with_index do |item, index|
       color = TEXT_COLOR
@@ -77,8 +79,6 @@ class Title
 
       # Maybe animate some background stuff
     end
-    out << @cat
-    out << @robot
     out
   end
 end

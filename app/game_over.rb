@@ -34,7 +34,6 @@ class GameOver < Menu
 
   def render
     out = [] #@bg
-    #out << banner(@title)
     out << {x: 423, y:400, w:434, h:278, path:"sprites/misc/rsk.png"}.sprite!
 
     out << @cat

@@ -14,7 +14,6 @@ class MainMenu < Menu
 
   def render
     out = []
-    #out << {x: 521, y: 641, text: @title, size_enum: 1, **BANNER_COLORS[1][0]}.label!#[@frame]}.label!
     out << {x: 423, y:400, w:434, h:278, path:"sprites/misc/rsk.png"}.sprite!
 
     # Draw Menu Items
@@ -27,8 +26,6 @@ class MainMenu < Menu
 
       # Maybe animate some background stuff
     end
-    out << @cat
-    out << @robot
     out
   end
 end
