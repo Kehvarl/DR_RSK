@@ -18,6 +18,7 @@ class Heart < AnimSprite
   end
 end
 
+# Need animated robot
 class Player < AnimSprite
   def initialize (x,y, is_player)
     super(x,y,is_player)
