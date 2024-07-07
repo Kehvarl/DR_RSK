@@ -22,7 +22,7 @@ class AnimSprite
     @flip_vertically = false
     @flip_horizontally = false
 
-    @current_pose = :idle_lick
+    @current_pose = :idle
     @current_frame = 0
     @frame_duration = 10
     @frame_delay = 10
@@ -107,8 +107,8 @@ class AnimSprite
         end
       end
     end
-    @tile_x = @current_frame*32
-    @tile_y = @pose_list[@current_pose][0]*32
+    @tile_x = @current_frame*@tile_w
+    @tile_y = @pose_list[@current_pose][0]*@tile_h
   end
 
   def tick(args, entities, allow_move = true)

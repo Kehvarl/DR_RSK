@@ -23,8 +23,8 @@ class Title
     @frame_delay = 10
     @cat = Cat.new(948, 400)
     @cat.flip_horizontally = false
-    @robot = Player.new(296, 400, false)
-    @robot.current_pose = :look
+    @robot = Player.new(264, 400, false)
+    @robot.current_pose = :idle
     @robot.flip_horizontally = true
 
     @title = "Robot Seeks Kitten"
