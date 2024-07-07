@@ -16,7 +16,7 @@ class GameOver < Menu
     @cat = Cat.new(648, 350)
     @cat.flip_horizontally = true
     @heart = Heart.new(632, 374)
-    @robot = Player.new(596, 350, false)
+    @robot = Player.new(564, 350, false)
 
     if bg
       @bg = bg

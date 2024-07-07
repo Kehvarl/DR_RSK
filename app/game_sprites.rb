@@ -22,20 +22,28 @@ end
 class Player < AnimSprite
   def initialize (x,y, is_player)
     super(x,y,is_player)
-    @path= "sprites/circle/indigo.png"
-    @w= 16
-    @h= 32
-    @tile_w= 80
-    @tile_h= 80
+    @path= "sprites/sheets/robot.png"
+    @w= 64
+    @h= 64
+    @tile_w= 64
+    @tile_h= 64
     @vx = 2
     @vy = 2
 
     @current_pose = :idle
     @pose_list = {
-      idle: [0,1,2, [:idle]],
-      walk: [0,1,1, [:idle]],
-      look: [0,1,1, [:look]]
+      idle:   [0,6,2, [:idle]],
+      in_air: [1,2,1, [:idle]],
+      jump:   [2,3,1, [:idle]],
+      land:   [3,4,1, [:idle]],
+      shoot:  [4,4,1, [:idle]],
+      jump2:  [5,6,1, [:idle]],
+      hurt:   [6,4,1, [:idle]],
+      coin:   [7,3,1, [:idle]],
+      dash:   [8,1,1, [:idle]],
+      walk:    [9,4,1, [:idle]]
     }
+    puts self
   end
 end
 
